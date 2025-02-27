@@ -163,6 +163,9 @@ vim.cmd [[
   vnoremap > >gv
 ]]
 
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+
 vim.keymap.set('n', '<leader>gg', '<cmd>lua vim.fn.system("tmux new-window lazygit")<CR>', { desc = 'Open LazyGit' })
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
@@ -668,6 +671,18 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
+        templ = {},
+        html = {
+          filetypes = { 'html', 'templ' },
+        },
+        tailwindcss = {
+          filetypes = { 'html', 'templ', 'javascript', 'typescript', 'vue', 'css' },
+          init_options = {
+            userLanguages = {
+              templ = 'html',
+            },
+          },
+        },
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -749,6 +764,13 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
         'vue-language-server',
         'typescript-language-server',
+        'gopls',
+        'templ',
+        'gofumpt',
+        'delve',
+        'html-lsp',
+        'prettierd',
+        'tailwindcss-language-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -808,9 +830,13 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         go = { 'gofmt' },
-        vue = { 'prettier' },
-        javascript = { 'prettier' },
-        typescript = { 'prettier' },
+        vue = { 'prettierd' },
+        javascript = { 'prettierd' },
+        typescript = { 'prettierd' },
+        html = { 'prettierd' },
+        css = { 'prettierd' },
+        json = { 'prettierd' },
+        templ = { 'gofumpt', 'templ', 'injected' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -1037,6 +1063,10 @@ require('lazy').setup({
         'vue',
         'typescript',
         'javascript',
+        'templ',
+        'gomod',
+        'gosum',
+        'gowork',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -1104,6 +1134,12 @@ require('lazy').setup({
     },
   },
 })
+
+vim.filetype.add {
+  extension = {
+    templ = 'templ',
+  },
+}
 
 vim.cmd.colorscheme 'neobones'
 
